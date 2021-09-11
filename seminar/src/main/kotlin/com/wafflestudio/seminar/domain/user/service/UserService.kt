@@ -16,16 +16,3 @@ class UserService(
     }
 
 }
-
-//    fun getAllSurveyResponses(): List<SurveyResponse> {
-//        return surveyResponseRepository.findAll()
-//    }
-//
-//    fun getSurveyResponsesByOsName(name: String): List<SurveyResponse> {
-//        val os = operatingSystemRepository.findByNameEquals(name) ?: throw OsNotFoundException()
-//        return surveyResponseRepository.findAllByOs(os)
-//    }
-//
-//    fun getSurveyResponseById(id: Long): SurveyResponse? {
-//        return surveyResponseRepository.findByIdOrNull(id) ?: throw SurveyNotFoundException()
-//    }

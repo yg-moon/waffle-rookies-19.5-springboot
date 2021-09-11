@@ -19,4 +19,8 @@ class OperatingSystem(
 
     @field:NotNull
     var price: Long? = null,
+
+    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "os")
+    // val surveyResponses = List<surveyResponse>
+
 )

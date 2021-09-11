@@ -2,10 +2,18 @@ package com.wafflestudio.seminar.domain.survey.api
 
 import com.wafflestudio.seminar.domain.survey.dto.SurveyResponseDto
 import com.wafflestudio.seminar.domain.os.exception.OsNotFoundException
+import com.wafflestudio.seminar.domain.os.model.OperatingSystem
+import com.wafflestudio.seminar.domain.os.service.OperatingSystemService
 import com.wafflestudio.seminar.domain.survey.exception.SurveyNotFoundException
 import com.wafflestudio.seminar.domain.survey.model.SurveyResponse
+import com.wafflestudio.seminar.domain.survey.repository.SurveyResponseRepository
 import com.wafflestudio.seminar.domain.survey.service.SurveyResponseService
+import com.wafflestudio.seminar.domain.user.dto.UserDto
+import com.wafflestudio.seminar.domain.user.model.User
+import com.wafflestudio.seminar.domain.user.service.UserService
 import org.modelmapper.ModelMapper
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -14,6 +22,9 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/results")
 class SurveyResponseController(
     private val surveyResponseService: SurveyResponseService,
+    private val surveyResponseRepository: SurveyResponseRepository,
+    private val operatingSystemService: OperatingSystemService,
+    private val userService: UserService,
     private val modelMapper: ModelMapper
 ) {
     @GetMapping("/")
@@ -42,13 +53,29 @@ class SurveyResponseController(
     }
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     fun addSurveyResponse(
         @RequestBody @Valid body: SurveyResponseDto.CreateRequest,
         @RequestHeader("User-Id") userId: Long
-    ): SurveyResponseDto.Response {
-        //TODO: API 생성
-//        val newSurveyResponse = modelMapper.map(body, SurveyResponse::class.java)
-        return SurveyResponseDto.Response()
+    ): ResponseEntity<SurveyResponseDto.Response> {
+        return try {
+            val os = operatingSystemService.getOperatingSystemByName(body.os)
+            val user = userService.getUserById(userId)
+            val newSurveyResponse = SurveyResponse(
+                id = body.id, os = os, springExp = body.spring_exp,
+                rdbExp = body.rdb_exp, programmingExp = body.programming_exp,
+                major = body.major, grade = body.grade, backendReason = body.backendReason,
+                waffleReason = body.waffleReason, somethingToSay = body.somethingToSay,
+                timestamp = body.timestamp, user_id = user)
+            surveyResponseRepository.save(newSurveyResponse)
+
+            val newDtoResponse = modelMapper.map(body, SurveyResponseDto.Response::class.java)
+            ResponseEntity.status(HttpStatus.CREATED).body(newDtoResponse)
+        } catch (e: DataIntegrityViolationException){
+            ResponseEntity.badRequest().build()
+        } catch (e: OsNotFoundException){
+            ResponseEntity.notFound().build()
+        }
     }
 
 }
