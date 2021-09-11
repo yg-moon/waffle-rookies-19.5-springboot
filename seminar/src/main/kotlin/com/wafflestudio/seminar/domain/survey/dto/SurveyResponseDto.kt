@@ -24,9 +24,10 @@ class SurveyResponseDto {
         var waffleReason: String? = "",
         var somethingToSay: String? = "",
         var timestamp: LocalDateTime? = null,
-        var user: User? = null
+        var user: User? = null // Q9.
     )
 
+    // Q8.
     data class CreateRequest(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
