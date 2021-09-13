@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.survey.model
 
 import com.wafflestudio.seminar.domain.os.model.OperatingSystem
+import com.wafflestudio.seminar.domain.user.model.User
 import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.Max
@@ -54,4 +55,10 @@ class SurveyResponse(
 
     @field:NotNull
     var timestamp: LocalDateTime = LocalDateTime.now(),
+
+    // Q5.
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+    var user_id: User? = null,
+
 )
