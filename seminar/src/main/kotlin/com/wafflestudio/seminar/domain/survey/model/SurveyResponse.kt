@@ -23,19 +23,19 @@ class SurveyResponse(
 
     @Column(name = "spring_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     var springExp: Int? = null,
 
     @Column(name = "rdb_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     var rdbExp: Int? = null,
 
     @Column(name = "programming_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     var programmingExp: Int? = null,
 
@@ -47,6 +47,7 @@ class SurveyResponse(
 
     @Column(name = "backend_reason")
     var backendReason: String? = null,
+
     @Column(name = "waffle_reason")
     var waffleReason: String? = null,
 
@@ -56,9 +57,9 @@ class SurveyResponse(
     @field:NotNull
     var timestamp: LocalDateTime = LocalDateTime.now(),
 
-    // Q5.
+    // Q5. survey_response table에 user_id column 추가.
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
-    var user_id: User? = null,
+    var user: User? = null,
 
-)
+    )

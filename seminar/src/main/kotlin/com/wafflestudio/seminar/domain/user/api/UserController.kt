@@ -22,7 +22,7 @@ class UserController(
     private val modelMapper: ModelMapper
 ) {
 
-    // Q6.
+    // Q6. POST /api/v1/user/ (유저 생성)
     @PostMapping("/")
     fun addUser(
         @RequestBody @Valid body: UserDto.CreateRequest,
@@ -37,7 +37,7 @@ class UserController(
         }
     }
 
-    // Q7.
+    // Q7. GET /api/v1/user/me (정보 확인)
     @GetMapping("/me/")
     fun getSurveyResponse(@RequestHeader("User-Id") userId: Long): ResponseEntity<UserDto.Response> {
         return try {

@@ -52,7 +52,7 @@ class SurveyResponseController(
         }
     }
 
-    // Q8.
+    // Q8. POST /api/v1/results/ (설문조사 생성)
     @PostMapping("/")
     fun addSurveyResponse(
         @RequestBody @Valid body: SurveyResponseDto.CreateRequest,
@@ -60,19 +60,16 @@ class SurveyResponseController(
     ): ResponseEntity<SurveyResponseDto.Response> {
         return try {
             // 설문내용을 받아서 DB에 저장
-            val os = operatingSystemService.getOperatingSystemByName(body.os)
-            val user = userService.getUserById(userId)
-            val newSurveyResponse = SurveyResponse(
-                id = body.id, os = os, springExp = body.spring_exp,
-                rdbExp = body.rdb_exp, programmingExp = body.programming_exp,
-                major = body.major, grade = body.grade, backendReason = body.backendReason,
-                waffleReason = body.waffleReason, somethingToSay = body.somethingToSay,
-                timestamp = body.timestamp, user_id = user)
+            val newSurveyResponse = modelMapper.map(body, SurveyResponse::class.java)
+            newSurveyResponse.os = operatingSystemService.getOperatingSystemByName(body.os)
+            newSurveyResponse.user = userService.getUserById(userId)
             surveyResponseRepository.save(newSurveyResponse)
 
             // Response 형식에 맞춰 리턴
             val newDtoResponse = modelMapper.map(body, SurveyResponseDto.Response::class.java)
-            ResponseEntity.status(HttpStatus.CREATED).body(newDtoResponse)
+            ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(newDtoResponse)
         } catch (e: DataIntegrityViolationException){
             ResponseEntity.badRequest().build() // 400
         } catch (e: OsNotFoundException){

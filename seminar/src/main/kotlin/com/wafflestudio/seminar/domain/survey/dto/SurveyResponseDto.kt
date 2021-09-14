@@ -27,41 +27,43 @@ class SurveyResponseDto {
         var user: User? = null // Q9.
     )
 
-    // Q8.
+    // Q8. POST /api/v1/results/ (설문조사 생성을 위한 DTO)
     data class CreateRequest(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long? = null,
 
-        @NotNull
-        @NotBlank
+        @field:NotNull
+        @field:NotBlank
         var os: String = " ",
 
-        @NotNull
-        @Min(0, message = "The value must be between 1 and 5")
-        @Max(5, message = "The value must be between 1 and 5")
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
         var spring_exp: Int? = null,
 
-        @NotNull
-        @Min(0, message = "The value must be between 1 and 5")
-        @Max(5, message = "The value must be between 1 and 5")
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
         var rdb_exp: Int? = null,
 
-        @NotNull
-        @Min(0, message = "The value must be between 1 and 5")
-        @Max(5, message = "The value must be between 1 and 5")
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
         var programming_exp: Int? = null,
 
+        @field:NotBlank
         var major: String? = "",
+
+        @field:NotBlank
         var grade: String? = "",
+
         var backendReason: String? = "",
         var waffleReason: String? = "",
         var somethingToSay: String? = "",
 
-        @NotNull
-        var timestamp: LocalDateTime = LocalDateTime.now(),
-
-        var user_id: Long? = null
+        @field:NotNull
+        var timestamp: LocalDateTime = LocalDateTime.now()
 
     )
 
