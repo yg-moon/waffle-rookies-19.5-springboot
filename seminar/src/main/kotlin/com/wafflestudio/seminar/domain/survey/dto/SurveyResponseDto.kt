@@ -3,10 +3,11 @@ package com.wafflestudio.seminar.domain.survey.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.wafflestudio.seminar.domain.os.dto.OperatingSystemDto
 import com.wafflestudio.seminar.domain.os.model.OperatingSystem
+import com.wafflestudio.seminar.domain.user.model.User
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
+import javax.persistence.*
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -22,19 +23,48 @@ class SurveyResponseDto {
         var backendReason: String? = "",
         var waffleReason: String? = "",
         var somethingToSay: String? = "",
-        var timestamp: LocalDateTime? = null
+        var timestamp: LocalDateTime? = null,
+        var user: User? = null // Q9.
     )
 
-    // TODO: 아래 두 DTO 완성
+    // Q8. POST /api/v1/results/ (설문조사 생성을 위한 DTO)
     data class CreateRequest(
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var id: Long? = null,
+
         @field:NotNull
-        var something: String? = "",
-        // 예시 - 지우고 새로 생성
+        @field:NotBlank
+        var os: String = " ",
+
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
+        var springExp: Int? = 0,
+
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
+        var rdbExp: Int? = 0,
+
+        @field:NotNull
+        @field:Min(1, message = "The value must be between 1 and 5")
+        @field:Max(5, message = "The value must be between 1 and 5")
+        var programmingExp: Int? = 0,
+
+        @field:NotBlank
+        var major: String? = " ",
+
+        @field:NotBlank
+        var grade: String? = " ",
+
+        var backendReason: String? = "",
+        var waffleReason: String? = "",
+        var somethingToSay: String? = "",
+
+        @field:NotNull
+        var timestamp: LocalDateTime = LocalDateTime.now()
 
     )
 
-    data class ModifyRequest(
-        var something: String? = ""
-        // 예시 - 지우고 새로 생성
-    )
 }
