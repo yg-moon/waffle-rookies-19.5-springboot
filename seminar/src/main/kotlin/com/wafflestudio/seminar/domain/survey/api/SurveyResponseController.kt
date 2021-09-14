@@ -66,7 +66,7 @@ class SurveyResponseController(
             surveyResponseRepository.save(newSurveyResponse)
 
             // Response 형식에 맞춰 리턴
-            val newDtoResponse = modelMapper.map(body, SurveyResponseDto.Response::class.java)
+            val newDtoResponse = modelMapper.map(newSurveyResponse, SurveyResponseDto.Response::class.java)
             ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(newDtoResponse)
