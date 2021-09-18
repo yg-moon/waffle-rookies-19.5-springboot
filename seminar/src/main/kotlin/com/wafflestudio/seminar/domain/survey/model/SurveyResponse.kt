@@ -1,5 +1,6 @@
 package com.wafflestudio.seminar.domain.survey.model
 
+import com.wafflestudio.seminar.domain.model.BaseEntity
 import com.wafflestudio.seminar.domain.os.model.OperatingSystem
 import com.wafflestudio.seminar.domain.user.model.User
 import java.time.LocalDateTime
@@ -12,54 +13,47 @@ import javax.validation.constraints.NotNull
 
 @Entity
 class SurveyResponse(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
     @ManyToOne
     @JoinColumn(name = "os_id", referencedColumnName = "id")
     @field:NotNull
-    var os: OperatingSystem? = null,
+    val os: OperatingSystem,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+    val user: User?,
 
     @Column(name = "spring_exp")
     @field:NotNull
-    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Min(0, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    var springExp: Int? = null,
+    val springExp: Int,
 
     @Column(name = "rdb_exp")
     @field:NotNull
-    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Min(0, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    var rdbExp: Int? = null,
+    val rdbExp: Int,
 
     @Column(name = "programming_exp")
     @field:NotNull
-    @field:Min(1, message = "The value must be between 1 and 5")
+    @field:Min(0, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
-    var programmingExp: Int? = null,
+    val programmingExp: Int,
 
     @field:NotBlank
-    var major: String? = null,
+    val major: String,
 
     @field:NotBlank
-    var grade: String? = null,
+    val grade: String,
 
     @Column(name = "backend_reason")
-    var backendReason: String? = null,
-
+    val backendReason: String? = null,
     @Column(name = "waffle_reason")
-    var waffleReason: String? = null,
+    val waffleReason: String? = null,
 
     @Column(name = "something_to_say")
-    var somethingToSay: String? = null,
+    val somethingToSay: String? = null,
 
     @field:NotNull
-    var timestamp: LocalDateTime = LocalDateTime.now(),
-
-    // Q5. survey_response table에 user_id column 추가.
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
-    var user: User? = null,
-
-    )
+    val timestamp: LocalDateTime = LocalDateTime.now(),
+): BaseEntity()

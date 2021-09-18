@@ -1,25 +1,27 @@
 package com.wafflestudio.seminar.domain.user.dto
 
-import com.wafflestudio.seminar.domain.os.model.OperatingSystem
-import java.time.LocalDateTime
+import com.wafflestudio.seminar.domain.user.model.User
 import javax.validation.constraints.NotBlank
-import javax.validation.constraints.NotNull
 
 class UserDto {
-
     data class Response(
-        var name: String = "new-name",
-        var email: String = "new-email"
-    )
+        val id: Long,
+        val email: String,
+        val name: String,
+    ) {
+        constructor(user: User) : this(
+            id = user.id,
+            email = user.email,
+            name = user.name
+        )
+    }
 
-    data class CreateRequest(
-        @field:NotNull
+    data class SignupRequest(
         @field:NotBlank
-        var name: String = "create-name",
-
-        @field:NotNull
+        val email: String,
         @field:NotBlank
-        var email: String = "create-email",
+        val name: String,
+        @field:NotBlank
+        val password: String,
     )
-
 }

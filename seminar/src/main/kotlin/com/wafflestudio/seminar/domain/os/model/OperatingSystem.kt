@@ -1,5 +1,7 @@
 package com.wafflestudio.seminar.domain.os.model
 
+import com.wafflestudio.seminar.domain.model.BaseEntity
+import com.wafflestudio.seminar.domain.survey.model.SurveyResponse
 import javax.persistence.*
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank
@@ -7,16 +9,15 @@ import javax.validation.constraints.NotNull
 
 @Entity
 class OperatingSystem(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
+    @field:NotBlank
+    val name: String,
 
     @field:NotBlank
-    var name: String? = null,
-
-    @field:NotBlank
-    var description: String? = null,
+    val description: String,
 
     @field:NotNull
-    var price: Long? = null,
-)
+    val price: Long,
+
+    @OneToMany(cascade = [CascadeType.ALL],mappedBy = "os")
+    val surveyResponses : List<SurveyResponse> = listOf()
+) : BaseEntity()

@@ -5,20 +5,21 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
-
 @Entity
+@Table(name = "seminar_user")
 class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-
-    @field:NotNull
-    @field:NotBlank
-    var name: String = "default-name",
-
     @Column(unique = true)
-    @field:NotNull
     @field:NotBlank
-    var email: String = "default-email",
+    val email: String,
 
-) : BaseEntity()
+    @field:NotBlank
+    val name: String,
+
+    @field:NotBlank
+    val password: String,
+
+    @Column
+    @field:NotNull
+    val roles: String = "",
+
+    ) : BaseEntity()
