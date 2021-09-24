@@ -22,4 +22,12 @@ class User(
     @field:NotNull
     val roles: String = "",
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "participant_id", referencedColumnName = "id")
+    val participantProfile: ParticipantProfile?,
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id", referencedColumnName = "id")
+    val instructorProfile: InstructorProfile?,
+
     ) : BaseEntity()
