@@ -1,10 +1,8 @@
 package com.wafflestudio.seminar.domain.user.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.OneToOne
-import javax.persistence.Table
+import com.wafflestudio.seminar.domain.seminar.Seminar
+import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 
@@ -21,5 +19,9 @@ class InstructorProfile(
     @field:NotNull
     @OneToOne(mappedBy = "instructorProfile", fetch = FetchType.LAZY)
     val user: User,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seminar_id", referencedColumnName = "id")
+    val seminar: Seminar,
 
     ) : BaseTimeEntity()
