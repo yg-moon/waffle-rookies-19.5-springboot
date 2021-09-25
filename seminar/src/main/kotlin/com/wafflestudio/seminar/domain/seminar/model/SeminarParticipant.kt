@@ -1,7 +1,6 @@
-package com.wafflestudio.seminar.domain.survey.model
+package com.wafflestudio.seminar.domain.seminar.model
 
 import com.wafflestudio.seminar.domain.model.BaseEntity
-import com.wafflestudio.seminar.domain.seminar.Seminar
 import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
 import javax.persistence.*
 

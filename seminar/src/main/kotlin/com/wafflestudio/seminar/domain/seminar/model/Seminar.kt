@@ -1,7 +1,6 @@
-package com.wafflestudio.seminar.domain.seminar
+package com.wafflestudio.seminar.domain.seminar.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
-import com.wafflestudio.seminar.domain.survey.model.SeminarParticipant
 import com.wafflestudio.seminar.domain.user.model.InstructorProfile
 import javax.persistence.Entity
 import javax.persistence.OneToMany
@@ -26,4 +25,4 @@ class Seminar(
     val seminarInstructors: List<InstructorProfile>,
 
 
-) : BaseTimeEntity()
+    ) : BaseTimeEntity()

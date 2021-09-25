@@ -1,7 +1,7 @@
 package com.wafflestudio.seminar.domain.user.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
-import com.wafflestudio.seminar.domain.seminar.Seminar
+import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
