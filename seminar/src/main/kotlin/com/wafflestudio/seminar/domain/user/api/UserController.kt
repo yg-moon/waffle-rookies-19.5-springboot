@@ -16,9 +16,11 @@ class UserController(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
     @PostMapping("/")
-    fun signup(@Valid @RequestBody signupRequest: UserDto.SignupRequest): ResponseEntity<UserDto.Response> {
+    fun signup(@Valid @RequestBody signupRequest: UserDto.SignupRequest):
+            ResponseEntity<UserDto.Response> {
         val user = userService.signup(signupRequest)
-        return ResponseEntity.noContent().header("Authentication", jwtTokenProvider.generateToken(user.email)).build()
+        return ResponseEntity.noContent().header("Authentication",
+            jwtTokenProvider.generateToken(user.email)).build()
     }
 
     @GetMapping("/me/")

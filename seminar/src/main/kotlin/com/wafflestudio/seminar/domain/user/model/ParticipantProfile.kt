@@ -2,10 +2,7 @@ package com.wafflestudio.seminar.domain.user.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
 import com.wafflestudio.seminar.domain.seminar.model.SeminarParticipant
-import javax.persistence.Entity
-import javax.persistence.OneToMany
-import javax.persistence.OneToOne
-import javax.persistence.Table
+import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
 @Entity
@@ -23,7 +20,7 @@ class ParticipantProfile(
     @OneToOne(mappedBy = "participantProfile")
     val user: User,
 
-    @OneToMany(mappedBy = "participantProfile")
+    @OneToMany(mappedBy = "participantProfile", cascade = [CascadeType.ALL])
     val seminarParticipants: List<SeminarParticipant>,
 
     ) : BaseTimeEntity()
