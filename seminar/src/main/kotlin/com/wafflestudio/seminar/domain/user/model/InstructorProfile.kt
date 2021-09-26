@@ -16,12 +16,11 @@ class InstructorProfile(
 
     // val charge: Charge?,
 
-    @field:NotNull
     @OneToOne(mappedBy = "instructorProfile", fetch = FetchType.LAZY)
-    val user: User,
+    val user: User? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seminar_id", referencedColumnName = "id")
-    val seminar: Seminar,
+    val seminar: Seminar? = null,
 
     ) : BaseTimeEntity()

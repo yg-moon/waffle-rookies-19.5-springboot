@@ -18,9 +18,9 @@ class ParticipantProfile(
     // val seminars: List<Seminar>,
 
     @OneToOne(mappedBy = "participantProfile")
-    val user: User,
+    val user: User? = null,
 
     @OneToMany(mappedBy = "participantProfile", cascade = [CascadeType.ALL])
-    val seminarParticipants: List<SeminarParticipant>,
+    val seminarParticipants: List<SeminarParticipant>? = null,
 
     ) : BaseTimeEntity()

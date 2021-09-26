@@ -23,5 +23,12 @@ class UserDto {
         val name: String,
         @field:NotBlank
         val password: String,
+        @field:NotBlank
+        val role: String,
+
+        val university: String = "",
+        val accepted: Boolean = true,
+        val company: String = "",
+        val year: Int? = null,
     )
 }
