@@ -27,4 +27,12 @@ class UserController(
     fun getCurrentUser(@CurrentUser user: User): UserDto.Response {
         return UserDto.Response(user)
     }
+
+    @GetMapping("{user_id}")
+    fun getUserById(@CurrentUser user: User,
+                       @RequestParam userId: Int): UserDto.Response {
+        return UserDto.Response(user)
+    }
+
+
 }
