@@ -24,19 +24,19 @@ class SurveyResponse(
 
     @Column(name = "spring_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     val springExp: Int,
 
     @Column(name = "rdb_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     val rdbExp: Int,
 
     @Column(name = "programming_exp")
     @field:NotNull
-    @field:Min(0, message = "The value must be between 1 and 5")
+    @field:Min(1, message = "The value must be between 1 and 5")
     @field:Max(5, message = "The value must be between 1 and 5")
     val programmingExp: Int,
 
