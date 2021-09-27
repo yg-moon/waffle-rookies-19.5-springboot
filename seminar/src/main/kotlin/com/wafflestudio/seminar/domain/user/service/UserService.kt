@@ -6,10 +6,14 @@ import com.wafflestudio.seminar.domain.user.dto.UserDto
 import com.wafflestudio.seminar.domain.user.exception.InvalidRoleException
 import com.wafflestudio.seminar.domain.user.exception.InvalidYearException
 import com.wafflestudio.seminar.domain.user.exception.UserAlreadyExistsException
+import com.wafflestudio.seminar.domain.user.exception.UserNotFoundException
 import com.wafflestudio.seminar.domain.user.model.InstructorProfile
 import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestBody
+import java.time.LocalDateTime
+import javax.validation.Valid
 
 @Service
 class UserService(
@@ -44,7 +48,30 @@ class UserService(
             signupRequest.name,
             encodedPassword,
             role,
+            LocalDateTime.now(),
             participantProfile,
             instructorProfile))
     }
+
+    fun editUser(user: User,
+                 @Valid @RequestBody editRequest: UserDto.EditRequest): User {
+        val savedUser = userRepository.findByEmail(user.email)
+            ?: throw UserNotFoundException()
+
+        val role: String = savedUser.roles
+        if (role == "participant"){
+            savedUser.participantProfile?.university = editRequest.university
+        }
+        else if (role == "instructor"){
+            if (editRequest.year != null && editRequest.year <= 0)
+                throw InvalidYearException("Year must be higher than 0")
+            savedUser.instructorProfile?.company = editRequest.company
+            savedUser.instructorProfile?.year = editRequest.year
+        }
+
+        return savedUser
+    }
+
+
+
 }

@@ -33,11 +33,20 @@ class UserController(
         return UserDto.Response(user)
     }
 
+    @PutMapping("/me/")
+    fun editCurrentUser(@CurrentUser user: User,
+        @Valid @RequestBody editRequest: UserDto.EditRequest): UserDto.Response{
+        val editedUser = userService.editUser(user, editRequest)
+        return UserDto.Response(editedUser)
+    }
+
     @GetMapping("{user_id}")
     fun getUserById(@CurrentUser user: User,
                        @RequestParam userId: Int): UserDto.Response {
         return UserDto.Response(user)
     }
+
+
 
 
 }

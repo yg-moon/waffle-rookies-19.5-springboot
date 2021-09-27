@@ -9,8 +9,7 @@ import javax.validation.constraints.NotBlank
 @Entity
 @Table(name = "participant_profile")
 class ParticipantProfile(
-    @field:NotBlank
-    val university: String,
+    var university: String = "",
 
     @field:NotBlank
     val accepted: Boolean,

@@ -38,4 +38,10 @@ class UserDto {
         val company: String = "",
         val year: Int? = null,
     )
+
+    data class EditRequest (
+        val university: String = "",
+        val company: String = "",
+        val year: Int? = null,
+    )
 }

@@ -10,9 +10,9 @@ import javax.validation.constraints.NotNull
 @Table(name = "instructor_profile")
 class InstructorProfile(
     @field:NotBlank
-    val company: String,
+    var company: String,
 
-    val year: Number?,
+    var year: Int?,
 
     @OneToOne(mappedBy = "instructorProfile", fetch = FetchType.LAZY)
     val user: User? = null,
