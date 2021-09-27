@@ -1,18 +1,25 @@
 package com.wafflestudio.seminar.domain.user.dto
 
 import com.wafflestudio.seminar.domain.user.model.User
+import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
 
 class UserDto {
     data class Response(
         val id: Long,
-        val email: String,
         val name: String,
+        val email: String,
+        val date_joined: LocalDateTime,
+        val participant_profile: ParticipantDto.Response?,
+        val instructor_profile: InstructorDto.Response?,
     ) {
         constructor(user: User) : this(
             id = user.id,
             email = user.email,
-            name = user.name
+            name = user.name,
+            date_joined = user.dateJoined,
+            participant_profile = user.participantProfile?.let { ParticipantDto.Response(it) },
+            instructor_profile = user.instructorProfile?.let { InstructorDto.Response(it) },
         )
     }
 

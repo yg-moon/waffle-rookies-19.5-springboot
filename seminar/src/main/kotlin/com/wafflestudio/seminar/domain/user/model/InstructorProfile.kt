@@ -12,9 +12,7 @@ class InstructorProfile(
     @field:NotBlank
     val company: String,
 
-    val year: Int?,
-
-    // val charge: Charge?,
+    val year: Number?,
 
     @OneToOne(mappedBy = "instructorProfile", fetch = FetchType.LAZY)
     val user: User? = null,

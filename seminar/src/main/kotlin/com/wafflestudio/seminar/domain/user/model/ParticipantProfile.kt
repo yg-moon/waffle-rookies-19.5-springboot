@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.user.model
 
 import com.wafflestudio.seminar.domain.model.BaseTimeEntity
+import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import com.wafflestudio.seminar.domain.seminar.model.SeminarParticipant
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -13,9 +14,6 @@ class ParticipantProfile(
 
     @field:NotBlank
     val accepted: Boolean,
-
-    // @field:NotNull
-    // val seminars: List<Seminar>,
 
     @OneToOne(mappedBy = "participantProfile")
     val user: User? = null,
