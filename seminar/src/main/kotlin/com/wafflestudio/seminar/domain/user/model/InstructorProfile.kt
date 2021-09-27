@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull
 @Entity
 @Table(name = "instructor_profile")
 class InstructorProfile(
-    @field:NotBlank
     var company: String,
 
     var year: Int?,

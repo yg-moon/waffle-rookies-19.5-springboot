@@ -21,13 +21,13 @@ class User(
 
     @Column
     @field:NotNull
-    val roles: String = "",
+    var roles: String = "",
 
     val dateJoined: LocalDateTime,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "participant_id", referencedColumnName = "id")
-    val participantProfile: ParticipantProfile?,
+    var participantProfile: ParticipantProfile?,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
     @JoinColumn(name = "instructor_id", referencedColumnName = "id")

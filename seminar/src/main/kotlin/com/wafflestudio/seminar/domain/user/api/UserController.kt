@@ -48,7 +48,7 @@ class UserController(
         return UserDto.Response(editedUser)
     }
 
-    @PutMapping("/participant/")
+    @PostMapping("/participant/")
     @ResponseStatus(HttpStatus.CREATED)
     fun editParticipantProfile(@CurrentUser user: User,
                                @Valid @RequestBody participantRequest: UserDto.ParticipantRequest)

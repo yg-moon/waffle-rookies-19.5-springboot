@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank
 class ParticipantProfile(
     var university: String = "",
 
-    @field:NotBlank
     var accepted: Boolean,
 
     @OneToOne(mappedBy = "participantProfile")

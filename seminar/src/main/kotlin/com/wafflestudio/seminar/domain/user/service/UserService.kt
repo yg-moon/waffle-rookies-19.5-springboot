@@ -66,6 +66,8 @@ class UserService(
             savedUser.instructorProfile?.year = editRequest.year
         }
 
+        userRepository.save(savedUser)
+
         return savedUser
     }
 
@@ -75,8 +77,13 @@ class UserService(
         val savedUser = userRepository.findByEmail(user.email)
             ?: throw UserNotFoundException()
         if (savedUser.roles == "participant") throw IsAlreadyParticipant("The user is already a participant")
-        savedUser.participantProfile?.university = participantRequest.university
-        savedUser.participantProfile?.accepted = participantRequest.accepted
+
+        savedUser.roles = "participant"
+        savedUser.participantProfile = ParticipantProfile(
+            participantRequest.university,
+            participantRequest.accepted)
+
+        userRepository.save(savedUser)
 
         return savedUser
     }
