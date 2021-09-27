@@ -14,7 +14,7 @@ class SeminarDto {
         val count: Int,
         val time: String,
         val online: Boolean,
-        val instructors: List<InstructorDto.SeminarResponse>,
+        val instructors: List<InstructorDto.SeminarResponse>?,
         val participants: List<ParticipantDto.SeminarResponse>?,
     ){
         constructor(seminar: Seminar): this(
@@ -24,7 +24,7 @@ class SeminarDto {
             count = seminar.count,
             time = seminar.time,
             online = seminar.online,
-            instructors = seminar.seminarInstructors.map{
+            instructors = seminar.seminarInstructors?.map{
                 InstructorDto.SeminarResponse(it.user)
             },
             participants = seminar.seminarParticipants?.map{
@@ -48,4 +48,12 @@ class SeminarDto {
             dropped_at = seminarParticipant.droppedAt,
         )
     }
+
+    data class CreateRequest(
+        val name: String = "",
+        val capacity: Int = 0,
+        val count: Int = 0,
+        val time: String = "",
+        val online: String = "true",
+    )
 }
