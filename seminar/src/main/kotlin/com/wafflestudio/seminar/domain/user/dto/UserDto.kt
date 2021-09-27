@@ -10,16 +10,16 @@ class UserDto {
         val name: String,
         val email: String,
         val date_joined: LocalDateTime,
-        val participant_profile: ParticipantDto.Response?,
-        val instructor_profile: InstructorDto.Response?,
+        val participant_profile: ParticipantDto.UserResponse?,
+        val instructor_profile: InstructorDto.UserResponse?,
     ) {
         constructor(user: User) : this(
             id = user.id,
             email = user.email,
             name = user.name,
             date_joined = user.dateJoined,
-            participant_profile = user.participantProfile?.let { ParticipantDto.Response(it) },
-            instructor_profile = user.instructorProfile?.let { InstructorDto.Response(it) },
+            participant_profile = user.participantProfile?.let { ParticipantDto.UserResponse(it) },
+            instructor_profile = user.instructorProfile?.let { InstructorDto.UserResponse(it) },
         )
     }
 
