@@ -3,10 +3,7 @@ package com.wafflestudio.seminar.domain.user.service
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import com.wafflestudio.seminar.domain.user.dto.UserDto
-import com.wafflestudio.seminar.domain.user.exception.InvalidRoleException
-import com.wafflestudio.seminar.domain.user.exception.InvalidYearException
-import com.wafflestudio.seminar.domain.user.exception.UserAlreadyExistsException
-import com.wafflestudio.seminar.domain.user.exception.UserNotFoundException
+import com.wafflestudio.seminar.domain.user.exception.*
 import com.wafflestudio.seminar.domain.user.model.InstructorProfile
 import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -56,7 +53,7 @@ class UserService(
     fun editUser(user: User,
                  @Valid @RequestBody editRequest: UserDto.EditRequest): User {
         val savedUser = userRepository.findByEmail(user.email)
-            ?: throw UserNotFoundException()
+            ?: throw UserNotFoundException("User not found")
 
         val role: String = savedUser.roles
         if (role == "participant"){
@@ -72,6 +69,16 @@ class UserService(
         return savedUser
     }
 
+    fun editParticipantProfile(user: User,
+                               @Valid @RequestBody participantRequest: UserDto.ParticipantRequest)
+    : User{
+        val savedUser = userRepository.findByEmail(user.email)
+            ?: throw UserNotFoundException()
+        if (savedUser.roles == "participant") throw IsAlreadyParticipant("The user is already a participant")
+        savedUser.participantProfile?.university = participantRequest.university
+        savedUser.participantProfile?.accepted = participantRequest.accepted
 
+        return savedUser
+    }
 
 }

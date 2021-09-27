@@ -12,7 +12,7 @@ class ParticipantProfile(
     var university: String = "",
 
     @field:NotBlank
-    val accepted: Boolean,
+    var accepted: Boolean,
 
     @OneToOne(mappedBy = "participantProfile")
     val user: User? = null,
