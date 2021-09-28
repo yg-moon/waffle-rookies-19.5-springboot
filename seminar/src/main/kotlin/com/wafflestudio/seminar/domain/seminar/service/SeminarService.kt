@@ -30,21 +30,16 @@ class SeminarService(
         var online = true
         if (toLower == "false") online = false
 
-        val save = seminarRepository.save(
-            Seminar(
+        val tempSeminar = seminarRepository.save(Seminar(
                 createRequest.name,
                 createRequest.capacity,
                 createRequest.count,
                 createRequest.time,
                 online,
-            )
-        )
-        val newSeminar = save
-
-        user.instructorProfile?.seminar = newSeminar
+            ))
+        user.instructorProfile?.seminar = tempSeminar
         userRepository.save(user)
-
-        return newSeminar
+        return seminarRepository.save(tempSeminar)
     }
 
     fun isTimeValid(time: String): Boolean {
@@ -64,7 +59,7 @@ class SeminarService(
         val optSeminar = seminarRepository.findById(seminarId)
         if (optSeminar.isEmpty) throw SeminarNotFoundException("Seminar not found")
 
-        val seminar = optSeminar.get()
+        var seminar = optSeminar.get()
 
         // Various Exceptions
         val instructorPresent = seminar.seminarInstructors?.any{
@@ -84,13 +79,13 @@ class SeminarService(
         val time = if (editRequest.time == "") seminar.time else editRequest.time
         val online = if (editRequest.time == "true") true else false
 
-        return seminarRepository.save(Seminar(
-            name,
-            capacity,
-            count,
-            time,
-            online,
-        ))
+        seminar.name = name
+        seminar.capacity = capacity
+        seminar.count = count
+        seminar.time = time
+        seminar.online = online
+
+        return seminarRepository.save(seminar)
     }
 
     fun getSeminar(seminarId: Long): Seminar {
@@ -121,7 +116,6 @@ class SeminarService(
     fun getSeminarList(): List<Seminar>?{
         val list = seminarRepository.findAll()
         list.sortedBy { it.createdAt }
-        list.reversed()
         return list
     }
 

@@ -10,16 +10,16 @@ import javax.persistence.Table
 @Entity
 @Table(name = "seminar")
 class Seminar(
-    val name: String,
-    val capacity: Int,
-    val count: Int,
-    val time: String,
-    val online: Boolean,
+    var name: String,
+    var capacity: Int,
+    var count: Int,
+    var time: String,
+    var online: Boolean,
 
     @OneToMany(mappedBy = "seminar", cascade = [CascadeType.ALL])
     val seminarParticipants: List<SeminarParticipant>? = null,
 
-    @OneToMany(mappedBy = "seminar")
+    @OneToMany(mappedBy = "seminar", cascade = [CascadeType.ALL])
     val seminarInstructors: List<InstructorProfile>? = null,
 
     ) : BaseTimeEntity()
