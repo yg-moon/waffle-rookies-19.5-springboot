@@ -1,15 +1,17 @@
 package com.wafflestudio.seminar.domain.seminar.service
 
 import com.wafflestudio.seminar.domain.seminar.dto.SeminarDto
-import com.wafflestudio.seminar.domain.seminar.exception.InvalidFormException
-import com.wafflestudio.seminar.domain.seminar.exception.NotInChargeException
-import com.wafflestudio.seminar.domain.seminar.exception.NotInstructorException
-import com.wafflestudio.seminar.domain.seminar.exception.SeminarNotFoundException
+import com.wafflestudio.seminar.domain.seminar.exception.*
 import com.wafflestudio.seminar.domain.seminar.model.Seminar
+import com.wafflestudio.seminar.domain.seminar.model.SeminarParticipant
 import com.wafflestudio.seminar.domain.seminar.repository.SeminarRepository
+import com.wafflestudio.seminar.domain.user.exception.InvalidRoleException
+import com.wafflestudio.seminar.domain.user.model.InstructorProfile
+import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 import java.util.regex.Pattern
 
 @Service
@@ -64,6 +66,7 @@ class SeminarService(
 
         val seminar = optSeminar.get()
 
+        // Various Exceptions
         val instructorPresent = seminar.seminarInstructors?.any{
             it.user?.id == user.id
         }
@@ -74,6 +77,7 @@ class SeminarService(
         }
         if (editRequest.capacity < currentCount!!) throw InvalidFormException("Invalid capacity")
 
+        // Assign variables
         val name = if (editRequest.name == "") seminar.name else editRequest.name
         val capacity = if (editRequest.capacity == 0) seminar.capacity else editRequest.capacity
         val count = if (editRequest.count == 0) seminar.count else editRequest.count
@@ -121,4 +125,68 @@ class SeminarService(
         return list
     }
 
+    fun registerSeminar(seminarId: Long, user: User,
+                        registerRequest: SeminarDto.RegisterRequest): Seminar{
+        val optSeminar = seminarRepository.findById(seminarId)
+        if (optSeminar.isEmpty) throw SeminarNotFoundException("Seminar not found")
+        val seminar = optSeminar.get()
+        val role = registerRequest.role
+
+        // Various Exceptions
+        if (!(role == "participant" || role == "instructor"))
+            throw InvalidRoleException("Role must be either participant or instructor")
+        if (role == "participant"){
+            if(user.participantProfile == null)
+                throw NotParticipantException("Not a participant")
+            if(!user.participantProfile!!.accepted)
+                throw NotAcceptedException("Not accepted")
+            if(seminar.capacity <= (seminar.seminarParticipants?.count() ?: 0))
+                throw CapacityLimitException("Capacity exceeded")
+        }
+        if (role == "instructor"){
+            if(user.instructorProfile == null)
+                throw NotInstructorException("Not a instructor")
+            if(user.instructorProfile?.seminar != null)
+                throw AlreadyInChargeException("Already in charge")
+        }
+
+        // Already Registered
+        val asParticipant = seminar.seminarParticipants?.any{
+            it.participantProfile.user?.id == user.id
+        }
+        val asInstructor = seminar.seminarInstructors?.any{
+            it.user?.id == user.id
+        }
+        if (asParticipant == true || asInstructor == true)
+            throw AlreadyRegisteredException("Already registered")
+
+        var updatedSeminar = seminar
+        // Actual Registration
+        if (role == "participant"){
+            val participantProfile = ParticipantProfile(
+                "",
+                true,
+                user,
+            )
+            SeminarParticipant(
+                LocalDateTime.now(),
+                true,
+                null,
+                seminar,
+                participantProfile
+            )
+            updatedSeminar = seminarRepository.save(seminar)
+        }
+        if (role == "instructor"){
+            val instructorProfile = InstructorProfile(
+                "",
+                null,
+                user,
+                seminar
+            )
+            updatedSeminar = seminarRepository.save(seminar)
+        }
+
+        return updatedSeminar
+    }
 }

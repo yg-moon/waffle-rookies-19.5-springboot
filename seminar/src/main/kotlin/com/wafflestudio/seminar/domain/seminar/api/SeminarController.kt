@@ -54,8 +54,18 @@ class SeminarController(
             val seminarList = seminarService.getSeminarListByNameOrOrder(name, order)
             return ListResponse(seminarList?.map{ SeminarDto.ListResponse(it)})
         }
-
     }
+
+    @PostMapping("/{seminar_id}/user/")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun registerSeminar(@PathVariable("seminar_id") seminarId: Long,
+                        @CurrentUser user: User,
+                        @RequestBody registerRequest: SeminarDto.RegisterRequest)
+    : SeminarDto.Response{
+        val seminar = seminarService.registerSeminar(seminarId, user, registerRequest)
+        return SeminarDto.Response(seminar)
+    }
+
 
 
 

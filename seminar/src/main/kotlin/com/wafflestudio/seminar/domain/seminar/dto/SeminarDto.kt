@@ -74,4 +74,9 @@ class SeminarDto {
             } ?: 0,
         )
     }
+
+    data class RegisterRequest(
+        val role: String,
+    )
+
 }
