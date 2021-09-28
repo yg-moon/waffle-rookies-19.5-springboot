@@ -7,7 +7,6 @@ import com.wafflestudio.seminar.domain.seminar.exception.NotInstructorException
 import com.wafflestudio.seminar.domain.seminar.exception.SeminarNotFoundException
 import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import com.wafflestudio.seminar.domain.seminar.repository.SeminarRepository
-import com.wafflestudio.seminar.domain.user.dto.UserDto
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
@@ -88,13 +87,12 @@ class SeminarService(
             time,
             online,
         ))
+    }
 
-
-
-
-
-
-
+    fun getSeminar(seminarId: Long): Seminar {
+        val optSeminar = seminarRepository.findById(seminarId)
+        if (optSeminar.isEmpty) throw SeminarNotFoundException("Seminar not found")
+        return optSeminar.get()
     }
 
 }

@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.seminar.api
 
 import com.wafflestudio.seminar.domain.seminar.dto.SeminarDto
+import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import com.wafflestudio.seminar.domain.seminar.service.SeminarService
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.global.auth.CurrentUser
@@ -31,6 +32,15 @@ class SeminarController(
         val seminar = seminarService.editSeminar(user, seminarId, editRequest)
         return SeminarDto.Response(seminar)
     }
+
+    @GetMapping("/{seminar_id}/")
+    @ResponseStatus(HttpStatus.OK)
+    fun getSeminar(@PathVariable("seminar_id") seminarId: Long): SeminarDto.Response{
+        val seminar = seminarService.getSeminar(seminarId)
+        return SeminarDto.Response(seminar)
+    }
+
+
 
 
 
