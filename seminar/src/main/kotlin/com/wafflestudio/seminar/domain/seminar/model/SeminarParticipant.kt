@@ -11,9 +11,9 @@ class SeminarParticipant(
 
     val joinedAt: LocalDateTime,
 
-    val isActive: Boolean,
+    var isActive: Boolean,
 
-    val droppedAt: LocalDateTime? = null,
+    var droppedAt: LocalDateTime? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seminar_id", referencedColumnName = "id")

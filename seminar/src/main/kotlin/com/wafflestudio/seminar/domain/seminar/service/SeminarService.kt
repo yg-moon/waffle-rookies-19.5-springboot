@@ -150,6 +150,12 @@ class SeminarService(
                 throw AlreadyInChargeException("Already in charge")
         }
 
+        val hadDropped = user.participantProfile?.seminarParticipants?.any{
+            it.droppedAt != null && it.seminar.id == seminar.id
+        }
+        if (hadDropped == true) throw HadDroppedException("Had dropped")
+
+
         // Already Registered
         val asParticipant = seminar.seminarParticipants?.any{
             it.participantProfile.user?.id == user.id
@@ -189,4 +195,25 @@ class SeminarService(
 
         return updatedSeminar
     }
+
+    fun quitSeminar(seminarId: Long, user: User): Seminar {
+        val optSeminar = seminarRepository.findById(seminarId)
+        if (optSeminar.isEmpty) throw SeminarNotFoundException("Seminar not found")
+        val seminar = optSeminar.get()
+
+        if (user.roles == "instructor") throw NotParticipantException("Not a participant")
+
+        val isParticipating = seminar.seminarParticipants?.any{
+            it.participantProfile.user?.id == user.id && it.participantProfile.accepted
+        }
+        if (isParticipating == true){
+            var seminarParticipant = seminar.seminarParticipants?.find { it.participantProfile.user?.id == user.id }
+            seminarParticipant?.isActive = false
+            seminarParticipant?.droppedAt = LocalDateTime.now()
+        }
+
+        return seminarRepository.save(seminar)
+    }
+
+
 }
