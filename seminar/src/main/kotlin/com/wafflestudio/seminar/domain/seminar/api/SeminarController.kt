@@ -21,4 +21,17 @@ class SeminarController(
         val seminar = seminarService.createSeminar(user, createRequest)
         return SeminarDto.Response(seminar)
     }
+
+
+    @PutMapping("/{seminar_id}/")
+    @ResponseStatus(HttpStatus.OK)
+    fun editSeminar(@PathVariable("seminar_id") seminarId: Long,
+                    @CurrentUser user: User,
+                    @RequestBody editRequest: SeminarDto.CreateRequest): SeminarDto.Response{
+        val seminar = seminarService.editSeminar(user, seminarId, editRequest)
+        return SeminarDto.Response(seminar)
+    }
+
+
+
 }
