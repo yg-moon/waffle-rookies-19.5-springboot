@@ -56,4 +56,22 @@ class SeminarDto {
         val time: String = "",
         val online: String = "true",
     )
+
+    data class ListResponse(
+        val id: Long,
+        val name: String,
+        val instructors: List<InstructorDto.SeminarResponse>?,
+        val participant_count: Int,
+    ){
+        constructor(seminar: Seminar) : this(
+            id = seminar.id,
+            name = seminar.name,
+            instructors = seminar.seminarInstructors?.map{
+                InstructorDto.SeminarResponse(it.user)
+            },
+            participant_count = seminar.seminarParticipants?.count{
+                it.isActive
+            } ?: 0,
+        )
+    }
 }

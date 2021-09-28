@@ -5,6 +5,7 @@ import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import com.wafflestudio.seminar.domain.seminar.service.SeminarService
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.global.auth.CurrentUser
+import com.wafflestudio.seminar.global.common.dto.ListResponse
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -38,6 +39,22 @@ class SeminarController(
     fun getSeminar(@PathVariable("seminar_id") seminarId: Long): SeminarDto.Response{
         val seminar = seminarService.getSeminar(seminarId)
         return SeminarDto.Response(seminar)
+    }
+
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    fun getSeminarList(@RequestParam(required = false) name: String?,
+                       @RequestParam(required = false) order: String?
+    ): ListResponse<SeminarDto.ListResponse>{
+        if(name == null && order == null){
+            val seminarList = seminarService.getSeminarList()
+            return ListResponse(seminarList?.map{ SeminarDto.ListResponse(it)})
+        }
+        else{
+            val seminarList = seminarService.getSeminarListByNameOrOrder(name, order)
+            return ListResponse(seminarList?.map{ SeminarDto.ListResponse(it)})
+        }
+
     }
 
 

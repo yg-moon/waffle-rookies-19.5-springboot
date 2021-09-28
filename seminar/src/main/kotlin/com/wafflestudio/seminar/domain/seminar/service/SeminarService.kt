@@ -95,4 +95,30 @@ class SeminarService(
         return optSeminar.get()
     }
 
+    fun getSeminarListByNameOrOrder(name: String?, order: String?): List<Seminar>?{
+        var list: List<Seminar>? = null
+
+        if(name != null){
+            list = seminarRepository.findSeminarsByNameContains(name)
+            list?.sortedBy { it.createdAt }
+            list?.reversed()
+            if(order != null && order == "earliest"){
+                list?.reversed()
+            }
+        }
+        else if(order != null && order == "earliest"){
+            list = seminarRepository.findAll()
+            list.sortedBy { it.createdAt }
+        }
+
+        return list
+    }
+
+    fun getSeminarList(): List<Seminar>?{
+        val list = seminarRepository.findAll()
+        list.sortedBy { it.createdAt }
+        list.reversed()
+        return list
+    }
+
 }
