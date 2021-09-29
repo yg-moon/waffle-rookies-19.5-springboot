@@ -99,23 +99,24 @@ class SeminarService(
 
         if(name != null){
             list = seminarRepository.findSeminarsByNameContains(name)
-            list?.sortedBy { it.createdAt }
-            list?.reversed()
+            list = list?.sortedBy { it.createdAt }
+            list = list?.reversed()
             if(order != null && order == "earliest"){
-                list?.reversed()
+                list = list?.reversed()
             }
         }
         else if(order != null && order == "earliest"){
             list = seminarRepository.findAll()
-            list.sortedBy { it.createdAt }
+            list = list.sortedBy { it.createdAt }
         }
 
         return list
     }
 
     fun getSeminarList(): List<Seminar>?{
-        val list = seminarRepository.findAll()
-        list.sortedBy { it.createdAt }
+        var list = seminarRepository.findAll()
+        list = list.sortedBy { it.createdAt }
+        list = list.reversed()
         return list
     }
 

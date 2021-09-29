@@ -34,7 +34,7 @@ class UserController(
         return UserDto.Response(user)
     }
 
-    @GetMapping("{user_id}")
+    @GetMapping("/{user_id}/")
     fun getUserById(@CurrentUser user: User,
                     @RequestParam userId: Int): UserDto.Response {
         return UserDto.Response(user)
