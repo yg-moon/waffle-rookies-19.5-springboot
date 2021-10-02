@@ -17,9 +17,9 @@ class Seminar(
     var online: Boolean,
 
     @OneToMany(mappedBy = "seminar", cascade = [CascadeType.ALL])
-    val seminarParticipants: List<SeminarParticipant>? = null,
+    val seminarParticipants: MutableList<SeminarParticipant>? = null,
 
     @OneToMany(mappedBy = "seminar", cascade = [CascadeType.ALL])
-    val seminarInstructors: List<InstructorProfile>? = null,
+    val seminarInstructors: MutableList<InstructorProfile>? = null,
 
     ) : BaseTimeEntity()

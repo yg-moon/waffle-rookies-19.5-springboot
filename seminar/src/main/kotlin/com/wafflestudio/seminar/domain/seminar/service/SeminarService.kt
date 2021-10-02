@@ -20,14 +20,11 @@ class SeminarService(
     private val userRepository: UserRepository,
 ) {
     fun createSeminar(user: User, createRequest: SeminarDto.CreateRequest): Seminar{
-        if (createRequest.name == "" || createRequest.capacity <= 0 ||
-            createRequest.count <= 0 || !isTimeValid(createRequest.time) ||
-            !isOnlineValid(createRequest.online)) throw InvalidFormException("Invalid form")
-
+        if (!isOnlineValid(createRequest.online)) throw InvalidFormException("Invalid form")
         if (user.roles != "instructor") throw NotInstructorException("Not an instructor")
 
-        val toLower = createRequest.online.lowercase()
         var online = true
+        val toLower = createRequest.online.lowercase()
         if (toLower == "false") online = false
 
         val tempSeminar = seminarRepository.save(Seminar(
@@ -42,13 +39,7 @@ class SeminarService(
         return seminarRepository.save(tempSeminar)
     }
 
-    fun isTimeValid(time: String): Boolean {
-        return Pattern.compile(
-            "([01]?[0-9]|2[0-3]):[0-5][0-9]"
-        ).matcher(time).matches()
-    }
-
-    fun isOnlineValid(online: String): Boolean{
+    private fun isOnlineValid(online: String): Boolean{
         val onlineLower: String = online.lowercase()
         if (onlineLower == "true" || onlineLower == "false")
             return true
@@ -58,10 +49,27 @@ class SeminarService(
     fun editSeminar(user: User, seminarId: Long, editRequest: SeminarDto.CreateRequest): Seminar{
         val optSeminar = seminarRepository.findById(seminarId)
         if (optSeminar.isEmpty) throw SeminarNotFoundException("Seminar not found")
-
         var seminar = optSeminar.get()
 
-        // Various Exceptions
+        // Check Exceptions
+        editSeminarCheckExceptions(user, seminar, editRequest)
+
+        // Assign variables
+        val name = if (editRequest.name == "") seminar.name else editRequest.name
+        val capacity = if (editRequest.capacity == 0) seminar.capacity else editRequest.capacity
+        val count = if (editRequest.count == 0) seminar.count else editRequest.count
+        val time = if (editRequest.time == "") seminar.time else editRequest.time
+        val online = if (editRequest.time == "true") true else false
+        seminar.name = name
+        seminar.capacity = capacity
+        seminar.count = count
+        seminar.time = time
+        seminar.online = online
+
+        return seminarRepository.save(seminar)
+    }
+
+    private fun editSeminarCheckExceptions(user: User, seminar: Seminar, editRequest: SeminarDto.CreateRequest){
         val instructorPresent = seminar.seminarInstructors?.any{
             it.user?.id == user.id
         }
@@ -71,21 +79,6 @@ class SeminarService(
             it.isActive == true
         }
         if (editRequest.capacity < currentCount!!) throw InvalidFormException("Invalid capacity")
-
-        // Assign variables
-        val name = if (editRequest.name == "") seminar.name else editRequest.name
-        val capacity = if (editRequest.capacity == 0) seminar.capacity else editRequest.capacity
-        val count = if (editRequest.count == 0) seminar.count else editRequest.count
-        val time = if (editRequest.time == "") seminar.time else editRequest.time
-        val online = if (editRequest.time == "true") true else false
-
-        seminar.name = name
-        seminar.capacity = capacity
-        seminar.count = count
-        seminar.time = time
-        seminar.online = online
-
-        return seminarRepository.save(seminar)
     }
 
     fun getSeminar(seminarId: Long): Seminar {
@@ -127,42 +120,11 @@ class SeminarService(
         val seminar = optSeminar.get()
         val role = registerRequest.role
 
-        // Various Exceptions
-        if (!(role == "participant" || role == "instructor"))
-            throw InvalidRoleException("Role must be either participant or instructor")
-        if (role == "participant"){
-            if(user.participantProfile == null)
-                throw NotParticipantException("Not a participant")
-            if(!user.participantProfile!!.accepted)
-                throw NotAcceptedException("Not accepted")
-            if(seminar.capacity <= (seminar.seminarParticipants?.count() ?: 0))
-                throw CapacityLimitException("Capacity exceeded")
-        }
-        if (role == "instructor"){
-            if(user.instructorProfile == null)
-                throw NotInstructorException("Not a instructor")
-            if(user.instructorProfile?.seminar != null)
-                throw AlreadyInChargeException("Already in charge")
-        }
+        // Check Exceptions
+        registerSeminarCheckExceptions(user, seminar, role)
 
-        val hadDropped = user.participantProfile?.seminarParticipants?.any{
-            it.droppedAt != null && it.seminar.id == seminar.id
-        }
-        if (hadDropped == true) throw HadDroppedException("Had dropped")
-
-
-        // Already Registered
-        val asParticipant = seminar.seminarParticipants?.any{
-            it.participantProfile.user?.id == user.id
-        }
-        val asInstructor = seminar.seminarInstructors?.any{
-            it.user?.id == user.id
-        }
-        if (asParticipant == true || asInstructor == true)
-            throw AlreadyRegisteredException("Already registered")
-
-        var updatedSeminar = seminar
         // Actual Registration
+        var updatedSeminar = seminar
         if (role == "participant"){
             val participantProfile = ParticipantProfile(
                 "",
@@ -189,6 +151,40 @@ class SeminarService(
         }
 
         return updatedSeminar
+    }
+
+    private fun registerSeminarCheckExceptions(user: User, seminar: Seminar, role: String){
+        // Various Exceptions
+        if (!(role == "participant" || role == "instructor"))
+            throw InvalidRoleException("Role must be either participant or instructor")
+        if (role == "participant"){
+            if(user.participantProfile == null)
+                throw NotParticipantException("Not a participant")
+            if(!user.participantProfile!!.accepted)
+                throw NotAcceptedException("Not accepted")
+            if(seminar.capacity <= (seminar.seminarParticipants?.count() ?: 0))
+                throw CapacityLimitException("Capacity exceeded")
+        }
+        if (role == "instructor"){
+            if(user.instructorProfile == null)
+                throw NotInstructorException("Not a instructor")
+            if(user.instructorProfile?.seminar != null)
+                throw AlreadyInChargeException("Already in charge")
+        }
+        val hadDropped = user.participantProfile?.seminarParticipants?.any{
+            it.droppedAt != null && it.seminar.id == seminar.id
+        }
+        if (hadDropped == true) throw HadDroppedException("Had dropped")
+
+        // Already Registered
+        val asParticipant = seminar.seminarParticipants?.any{
+            it.participantProfile.user?.id == user.id
+        }
+        val asInstructor = seminar.seminarInstructors?.any{
+            it.user?.id == user.id
+        }
+        if (asParticipant == true || asInstructor == true)
+            throw AlreadyRegisteredException("Already registered")
     }
 
     fun quitSeminar(seminarId: Long, user: User): Seminar {

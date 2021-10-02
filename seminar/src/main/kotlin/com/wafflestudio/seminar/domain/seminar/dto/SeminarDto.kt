@@ -4,7 +4,11 @@ import com.wafflestudio.seminar.domain.seminar.model.Seminar
 import com.wafflestudio.seminar.domain.seminar.model.SeminarParticipant
 import com.wafflestudio.seminar.domain.user.dto.InstructorDto
 import com.wafflestudio.seminar.domain.user.dto.ParticipantDto
+import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotNull
 
 class SeminarDto {
     data class Response(
@@ -50,10 +54,21 @@ class SeminarDto {
     }
 
     data class CreateRequest(
-        val name: String = "",
-        val capacity: Int = 0,
-        val count: Int = 0,
-        val time: String = "",
+        @field: NotBlank
+        val name: String,
+
+        @field: NotNull
+        @field: Min(1)
+        val capacity: Int,
+
+        @field: NotNull
+        @field: Min(1)
+        val count: Int,
+
+        @field: NotNull
+        @field: DateTimeFormat(pattern = "HH:mm")
+        val time: String,
+
         val online: String = "true",
     )
 
