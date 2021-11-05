@@ -1,6 +1,7 @@
 package com.wafflestudio.seminar.domain.user.model
 
 import com.wafflestudio.seminar.domain.model.BaseEntity
+import java.time.LocalDateTime
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
@@ -20,6 +21,16 @@ class User(
 
     @Column
     @field:NotNull
-    val roles: String = "",
+    var roles: String = "",
+
+    val dateJoined: LocalDateTime,
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "participant_id", referencedColumnName = "id")
+    var participantProfile: ParticipantProfile?,
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "instructor_id", referencedColumnName = "id")
+    val instructorProfile: InstructorProfile?,
 
     ) : BaseEntity()
