@@ -1,12 +1,13 @@
 package com.wafflestudio.seminar.global.common.dto
 
 data class ListResponse<T>(
+    val count: Int,
     val results: List<T>,
-    val count: Int
+
 )
 {
     constructor(list: List<T>?) : this(
+        list?.size ?: 0,
         list.orEmpty(),
-        list?.size ?: 0
     )
 }

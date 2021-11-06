@@ -12,7 +12,6 @@ import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
-import java.util.regex.Pattern
 
 @Service
 class SeminarService(
