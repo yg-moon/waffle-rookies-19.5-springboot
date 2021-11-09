@@ -37,3 +37,8 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+
+app:
+  jwt:
+    jwt-secret-key: wafflestudio
+    jwt-expiration-in-ms: 10800000
