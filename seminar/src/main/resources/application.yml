@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:mysql://localhost:3306/seminar?serverTimezone=UTC
     username: waffle-spring
@@ -20,3 +23,17 @@ app:
     jwt-secret-key: wafflestudio
     jwt-expiration-in-ms: 10800000
 
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+    datasource:
+      url:
+      username: waffle-spring
+      password: wafflestudio
+    jpa:
+      generate-ddl: true
+      hibernate:
+        ddl-auto: update
