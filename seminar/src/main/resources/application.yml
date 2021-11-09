@@ -29,11 +29,11 @@ spring:
   config:
     activate:
       on-profile: prod
-    datasource:
-      url: jdbc:mysql://spring-seminar-database.ci186wtvyg0m.us-east-2.rds.amazonaws.com:3306/seminar?serverTimezone=UTC
-      username: waffle-spring
-      password: wafflestudio
-    jpa:
-      generate-ddl: true
-      hibernate:
-        ddl-auto: update
+  datasource:
+    url: jdbc:mysql://spring-seminar-database.ci186wtvyg0m.us-east-2.rds.amazonaws.com:3306/seminar?serverTimezone=UTC
+    username: waffle-spring
+    password: wafflestudio
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
