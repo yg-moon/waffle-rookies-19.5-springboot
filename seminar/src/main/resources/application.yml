@@ -30,7 +30,7 @@ spring:
     activate:
       on-profile: prod
     datasource:
-      url:
+      url: jdbc:mysql://spring-seminar-database.ci186wtvyg0m.us-east-2.rds.amazonaws.com:3306/seminar?serverTimezone=UTC
       username: waffle-spring
       password: wafflestudio
     jpa:
