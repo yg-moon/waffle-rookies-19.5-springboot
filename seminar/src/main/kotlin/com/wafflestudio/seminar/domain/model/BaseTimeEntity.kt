@@ -17,5 +17,5 @@ open class BaseTimeEntity (
     open var createdAt: LocalDateTime? = LocalDateTime.now(),
 
     @LastModifiedDate
-    var updatedAt: LocalDateTime? = null,
+    open var updatedAt: LocalDateTime? = null,
 )
