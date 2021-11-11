@@ -12,6 +12,6 @@ class TestController {
     @GetMapping("/ping/")
     @ResponseStatus(HttpStatus.OK)
     fun pong(): String{
-        return "pong3"
+        return "pong4"
     }
 }
