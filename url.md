@@ -1,4 +1,3 @@
 - Public IPv4 address: 3.15.143.205
 - Public IPv4 DNS: ec2-3-15-143-205.us-east-2.compute.amazonaws.com
 - HTTP Domain: p1down.shop
-- HTTPS Domain: 
