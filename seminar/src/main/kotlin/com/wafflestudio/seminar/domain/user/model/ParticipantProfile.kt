@@ -13,10 +13,10 @@ class ParticipantProfile(
 
     var accepted: Boolean,
 
-    @OneToOne(mappedBy = "participantProfile")
+    @OneToOne(mappedBy = "participantProfile", fetch = FetchType.LAZY)
     val user: User? = null,
 
     @OneToMany(mappedBy = "participantProfile", cascade = [CascadeType.ALL])
-    val seminarParticipants: List<SeminarParticipant>? = null,
+    val seminarParticipants: MutableList<SeminarParticipant>? = mutableListOf(),
 
     ) : BaseTimeEntity()

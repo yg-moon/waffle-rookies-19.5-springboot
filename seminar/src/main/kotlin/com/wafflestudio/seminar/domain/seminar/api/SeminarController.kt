@@ -24,7 +24,6 @@ class SeminarController(
         return SeminarDto.Response(seminar)
     }
 
-
     @PutMapping("/{seminar_id}/")
     @ResponseStatus(HttpStatus.OK)
     fun editSeminar(@PathVariable("seminar_id") seminarId: Long,

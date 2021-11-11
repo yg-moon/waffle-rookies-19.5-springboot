@@ -3,8 +3,11 @@ package com.wafflestudio.seminar.domain.user.api
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.service.UserService
 import com.wafflestudio.seminar.domain.user.dto.UserDto
+import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import com.wafflestudio.seminar.global.auth.CurrentUser
 import com.wafflestudio.seminar.global.auth.JwtTokenProvider
+import org.springframework.data.jpa.repository.EntityGraph
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,6 +17,7 @@ import javax.validation.Valid
 @RequestMapping("/api/v1/users")
 class UserController(
     private val userService: UserService,
+    private val userRepository: UserRepository,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
     @PostMapping("/")
@@ -24,20 +28,26 @@ class UserController(
             jwtTokenProvider.generateToken(user.email)).build()
     }
 
-//    @PostMapping("/login/")
-//    fun login(): ResponseEntity<UserDto.Response>{
-//        return
-//    }
-
     @GetMapping("/me/")
     fun getCurrentUser(@CurrentUser user: User): UserDto.Response {
-        return UserDto.Response(user)
+        val foundUser = userRepository.findByIdOrNull(user.id)
+        var foundUser2: User = user
+        if (foundUser != null){
+            foundUser2 = foundUser
+        }
+        return UserDto.Response(foundUser2)
     }
 
     @GetMapping("/{user_id}/")
     fun getUserById(@CurrentUser user: User,
                     @RequestParam userId: Int): UserDto.Response {
-        return UserDto.Response(user)
+        val id = userId as Long?
+        val foundUser = userRepository.findByIdOrNull(id)
+        var foundUser2: User = user
+        if (foundUser != null){
+            foundUser2 = foundUser
+        }
+        return UserDto.Response(foundUser2)
     }
 
     @PutMapping("/me/")

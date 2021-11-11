@@ -10,10 +10,13 @@ import com.wafflestudio.seminar.domain.user.model.InstructorProfile
 import com.wafflestudio.seminar.domain.user.model.ParticipantProfile
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Service
+@Transactional
 class SeminarService(
     private val seminarRepository: SeminarRepository,
     private val userRepository: UserRepository,
@@ -26,15 +29,18 @@ class SeminarService(
         val toLower = createRequest.online.lowercase()
         if (toLower == "false") online = false
 
-        val tempSeminar = seminarRepository.save(Seminar(
+        val tempSeminar = Seminar(
                 createRequest.name,
                 createRequest.capacity,
                 createRequest.count,
                 createRequest.time,
                 online,
-            ))
-        user.instructorProfile?.seminar = tempSeminar
-        userRepository.save(user)
+            )
+
+        val foundUser = userRepository.findByIdOrNull(user.id)
+        tempSeminar.seminarInstructors?.add(foundUser?.instructorProfile)
+        foundUser?.instructorProfile?.seminar = tempSeminar
+
         return seminarRepository.save(tempSeminar)
     }
 
@@ -70,12 +76,12 @@ class SeminarService(
 
     private fun editSeminarCheckExceptions(user: User, seminar: Seminar, editRequest: SeminarDto.CreateRequest){
         val instructorPresent = seminar.seminarInstructors?.any{
-            it.user?.id == user.id
+            it?.user?.id == user.id
         }
         if (instructorPresent == false) throw NotInChargeException("Not in charge")
 
         val currentCount = seminar.seminarParticipants?.count{
-            it.isActive == true
+            it?.isActive == true
         }
         if (editRequest.capacity < currentCount!!) throw InvalidFormException("Invalid capacity")
     }
@@ -177,10 +183,10 @@ class SeminarService(
 
         // Already Registered
         val asParticipant = seminar.seminarParticipants?.any{
-            it.participantProfile.user?.id == user.id
+            it?.participantProfile?.user?.id == user.id
         }
         val asInstructor = seminar.seminarInstructors?.any{
-            it.user?.id == user.id
+            it?.user?.id == user.id
         }
         if (asParticipant == true || asInstructor == true)
             throw AlreadyRegisteredException("Already registered")
@@ -194,10 +200,10 @@ class SeminarService(
         if (user.roles == "instructor") throw NotParticipantException("Not a participant")
 
         val isParticipating = seminar.seminarParticipants?.any{
-            it.participantProfile.user?.id == user.id && it.participantProfile.accepted
+            it?.participantProfile?.user?.id == user.id && it?.participantProfile.accepted
         }
         if (isParticipating == true){
-            var seminarParticipant = seminar.seminarParticipants?.find { it.participantProfile.user?.id == user.id }
+            var seminarParticipant = seminar.seminarParticipants?.find { it?.participantProfile?.user?.id == user.id }
             seminarParticipant?.isActive = false
             seminarParticipant?.droppedAt = LocalDateTime.now()
         }
