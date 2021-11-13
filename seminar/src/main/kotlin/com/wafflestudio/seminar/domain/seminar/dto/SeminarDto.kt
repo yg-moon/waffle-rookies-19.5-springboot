@@ -30,7 +30,7 @@ class SeminarDto {
             online = seminar.online,
             instructors = seminar.seminarInstructors?.map{
                 InstructorDto.SeminarResponse(it?.user)
-            },
+            } ?: listOf(),
             participants = seminar.seminarParticipants?.map{
                 ParticipantDto.SeminarResponse(it!!)
             } ?: listOf(),
@@ -83,7 +83,7 @@ class SeminarDto {
             name = seminar.name,
             instructors = seminar.seminarInstructors?.map{
                 InstructorDto.SeminarResponse(it?.user)
-            },
+            } ?: listOf(),
             participant_count = seminar.seminarParticipants?.count{
                 it!!.isActive
             } ?: 0,

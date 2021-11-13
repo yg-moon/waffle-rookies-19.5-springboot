@@ -15,12 +15,12 @@ class SeminarParticipant(
 
     var droppedAt: LocalDateTime? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "seminar_id", referencedColumnName = "id")
     val seminar: Seminar,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "participant_id", referencedColumnName = "id")
-    val participantProfile: ParticipantProfile,
+    val participantProfile: ParticipantProfile?,
 
     ) : BaseEntity()

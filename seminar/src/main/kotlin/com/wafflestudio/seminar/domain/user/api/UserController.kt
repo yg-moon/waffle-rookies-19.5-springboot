@@ -3,6 +3,7 @@ package com.wafflestudio.seminar.domain.user.api
 import com.wafflestudio.seminar.domain.user.model.User
 import com.wafflestudio.seminar.domain.user.service.UserService
 import com.wafflestudio.seminar.domain.user.dto.UserDto
+import com.wafflestudio.seminar.domain.user.exception.UserNotFoundException
 import com.wafflestudio.seminar.domain.user.repository.UserRepository
 import com.wafflestudio.seminar.global.auth.CurrentUser
 import com.wafflestudio.seminar.global.auth.JwtTokenProvider
@@ -40,19 +41,14 @@ class UserController(
 
     @GetMapping("/{user_id}/")
     fun getUserById(@CurrentUser user: User,
-                    @RequestParam userId: Int): UserDto.Response {
-        val id = userId as Long?
-        val foundUser = userRepository.findByIdOrNull(id)
-        var foundUser2: User = user
-        if (foundUser != null){
-            foundUser2 = foundUser
-        }
-        return UserDto.Response(foundUser2)
+                    @PathVariable("user_id") userId: Long?): UserDto.Response {
+        val foundUser = userRepository.findByIdOrNull(userId) ?: throw UserNotFoundException("User not found")
+        return UserDto.Response(foundUser)
     }
 
     @PutMapping("/me/")
     fun editCurrentUser(@CurrentUser user: User,
-                        @Valid @RequestBody editRequest: UserDto.EditRequest)
+                        @Valid @RequestBody(required = false) editRequest: UserDto.EditRequest?)
     : UserDto.Response{
         val editedUser = userService.editUser(user, editRequest)
         return UserDto.Response(editedUser)

@@ -51,15 +51,16 @@ class UserService(
     }
 
     fun editUser(user: User,
-                 @Valid @RequestBody editRequest: UserDto.EditRequest): User {
+                 @Valid @RequestBody editRequest: UserDto.EditRequest?): User {
         val savedUser = userRepository.findByEmail(user.email)
             ?: throw UserNotFoundException("User not found")
 
-        val role: String = savedUser.roles
-        if (role == "participant"){
+        if(editRequest == null) return savedUser
+
+        if (savedUser.participantProfile != null){
             savedUser.participantProfile?.university = editRequest.university
         }
-        else if (role == "instructor"){
+        else if (savedUser.instructorProfile != null){
             if (editRequest.year != null && editRequest.year <= 0)
                 throw InvalidYearException("Year must be higher than 0")
             savedUser.instructorProfile?.company = editRequest.company
@@ -76,7 +77,7 @@ class UserService(
     : User{
         val savedUser = userRepository.findByEmail(user.email)
             ?: throw UserNotFoundException()
-        if (savedUser.roles == "participant") throw IsAlreadyParticipant("The user is already a participant")
+        if (savedUser.participantProfile != null) throw IsAlreadyParticipant("The user is already a participant")
 
         savedUser.roles = "participant"
         savedUser.participantProfile = ParticipantProfile(
