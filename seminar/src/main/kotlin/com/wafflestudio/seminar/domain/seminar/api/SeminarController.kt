@@ -73,4 +73,6 @@ class SeminarController(
         return SeminarDto.Response(seminar)
     }
 
+    //
+
 }
