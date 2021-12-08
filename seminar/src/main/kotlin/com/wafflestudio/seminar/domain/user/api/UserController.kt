@@ -32,6 +32,7 @@ class UserController(
     @GetMapping("/me/")
     fun getCurrentUser(@CurrentUser user: User): UserDto.Response {
         val foundUser = userRepository.findByIdOrNull(user.id)
+        // UserDto.Response takes User as param, whereas findByIdOrNull returns User? type.
         var foundUser2: User = user
         if (foundUser != null){
             foundUser2 = foundUser
