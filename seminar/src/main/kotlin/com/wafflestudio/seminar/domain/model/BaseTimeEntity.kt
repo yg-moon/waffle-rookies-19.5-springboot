@@ -14,8 +14,8 @@ open class BaseTimeEntity (
     open val id: Long = 0,
 
     @CreatedDate
-    open val createdAt: LocalDateTime? = null,
+    open var createdAt: LocalDateTime? = LocalDateTime.now(),
 
     @LastModifiedDate
-    open val updatedAt: LocalDateTime? = null,
+    open var updatedAt: LocalDateTime? = null,
 )

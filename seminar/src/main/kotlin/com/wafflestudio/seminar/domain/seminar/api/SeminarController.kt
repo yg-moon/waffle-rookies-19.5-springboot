@@ -24,12 +24,11 @@ class SeminarController(
         return SeminarDto.Response(seminar)
     }
 
-
     @PutMapping("/{seminar_id}/")
     @ResponseStatus(HttpStatus.OK)
     fun editSeminar(@PathVariable("seminar_id") seminarId: Long,
                     @CurrentUser user: User,
-                    @RequestBody editRequest: SeminarDto.CreateRequest): SeminarDto.Response{
+                    @RequestBody(required = false) editRequest: SeminarDto.CreateRequest?): SeminarDto.Response{
         val seminar = seminarService.editSeminar(user, seminarId, editRequest)
         return SeminarDto.Response(seminar)
     }
@@ -69,9 +68,11 @@ class SeminarController(
     @DeleteMapping("/{seminar_id}/user/me/")
     @ResponseStatus(HttpStatus.OK)
     fun quitSeminar(@PathVariable("seminar_id") seminarId: Long,
-                    @CurrentUser user: User):SeminarDto.Response{
+                    @CurrentUser user: User): SeminarDto.Response{
         val seminar = seminarService.quitSeminar(seminarId, user)
         return SeminarDto.Response(seminar)
     }
+
+    //
 
 }
