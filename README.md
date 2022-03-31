@@ -1,6 +1,7 @@
-# 배운 점 및 소감
-
-- 배포를 완료하는데 상당한 시간이 걸렸는데, 정답은 간단해도 그걸 찾아내는 과정이 쉽지 않다는 걸 느꼈습니다.
-- 어떠한 가이드를 참고하더라도 아무 문제 없이 진행되는 경우는 없다는 걸 느꼈습니다.
-  - 환경에 따라 설정이 다 조금씩 다르고, 다양한 문제가 생기기 때문에 여러 소스를 참고해야 했습니다.
-- 테스트를 진행하면서 과제2의 남겨진 오류를 발견할 수 있었습니다.
+# 요약
+- [와플스튜디오 19.5기 루키과정](https://github.com/wafflestudio/seminar-2021) 이수를 위한 과제를 수행했습니다. (Kotlin/SpringBoot)
+- [Pull Request](https://github.com/yg-moon/waffle-rookies-19.5-springboot/pulls?q=is%3Apr+is%3Aclosed)를 통해 상호 피드백을 주고 받았습니다.
+- 과제 Spec
+  - [과제1](https://github.com/wafflestudio/seminar-2021/tree/master/springboot/seminar1/assignment1/README.md): SpringBoot CRUD 어플리케이션 개발 이해
+  - [과제2](https://github.com/wafflestudio/seminar-2021/blob/master/springboot/seminar2/assignment2/README.md): 요구사항에 맞춰 API 개발
+  - [과제3,4](https://github.com/wafflestudio/seminar-2021/blob/master/springboot/seminar3/assignment3.md): 테스팅 및 배포
